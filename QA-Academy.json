@@ -1,0 +1,582 @@
+{
+	"info": {
+		"_postman_id": "30d41455-d788-4721-a926-55aec9d8ee42",
+		"name": "QA Academy website",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "22785341"
+	},
+	"item": [
+		{
+			"name": "Login admin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if (pm.response.code === 200){",
+							"    const jsonResponse = pm.response.json();",
+							"    pm.globals.set(\"admin_token\", jsonResponse.token);",
+							"}",
+							"",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"username\": \"admin\",\"password\": \"password\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/auth/login",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login user_one",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if (pm.response.code === 200){",
+							"    const jsonResponse = pm.response.json();",
+							"    pm.globals.set(\"user_one_token\", jsonResponse.token);",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"username\": \"user_one\",\"password\": \"password\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/auth/login",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "All books",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let respBody;",
+							"",
+							"pm.test(\"Should verify status code\", () => {",
+							"    pm.response.to.have.status(200);",
+							"    respBody = pm.response.json();",
+							"    console.log(respBody);",
+							"});",
+							"",
+							"pm.test(\"Should verify type of title\", () => {",
+							"    respBody.data.map(item => {",
+							"        pm.expect(item.title).to.be.a(\"string\");",
+							"    })",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/books",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"books"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New book",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"",
+							"let respBody;",
+							"",
+							"pm.test(\"Should verify status code\", () => {",
+							"    pm.response.to.have.status(200);",
+							"    respBody = pm.response.json();",
+							"    console.log(respBody);",
+							"});",
+							"",
+							"pm.test(\"Should verify created book title\", () => {",
+							"    pm.expect(respBody.title).to.eql(\"Man From The High Castle\");",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"author\": \"Philip K. Dick\",\"title\": \"Man From The High Castle\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/books",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"books"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Favourite Book",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let respBody;",
+							"",
+							"pm.test(\"Should verify status code\", () => {",
+							"    pm.response.to.have.status(200);",
+							"    respBody = pm.response.json();",
+							"    console.log(respBody);",
+							"});",
+							"",
+							"pm.test(\"Should verify favourite book id\", () => {",
+							"    pm.expect(respBody.id).to.eql(pm.collectionVariables.get(\"favBook\"));",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_one_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/books/{{favBook}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"books",
+						"{{favBook}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Book update",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let respBody;",
+							"",
+							"pm.test(\"Should verify status code\", () => {",
+							"    pm.response.to.have.status(200);",
+							"    respBody = pm.response.json();",
+							"});",
+							"",
+							"pm.test(\"Should verify updated author value\", () => {",
+							"    pm.expect(respBody.author).to.eql(pm.collectionVariables.get(\"author\"));",
+							"})",
+							"",
+							"pm.test(\"Should verify updated title value\", () => {",
+							"    pm.expect(respBody.title).to.eql(pm.collectionVariables.get(\"title\"));",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "author",
+						"value": "Olga Tokarczuk",
+						"type": "text"
+					},
+					{
+						"key": "title",
+						"value": "Empuzjon",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n       \"author\": \"Olga Tokarczuk\",\n       \"title\": \"Empuzjon\"\n   }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/books/cl6vwom510307h87449clz3kt",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"books",
+						"cl6vwom510307h87449clz3kt"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Rented books",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let respBody;",
+							"",
+							"pm.test(\"Should verify status code\", () => {",
+							"    pm.response.to.have.status(200);",
+							"    respBody = pm.response.json();",
+							"    console.log(respBody);",
+							"});",
+							"",
+							"pm.test(\"Should verify rented status\", () => {",
+							"     respBody.data.map(item => {",
+							"        pm.expect(item.rented).to.eql(true);",
+							"    })",
+							"})",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_one_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/books/rented-books",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"books",
+						"rented-books"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Move book to rented",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let respBody;",
+							"",
+							"pm.test(\"Should verify status code\", () => {",
+							"    pm.response.to.have.status(200);",
+							"    respBody = pm.response.json();",
+							"    console.log(respBody);",
+							"});",
+							"",
+							"pm.test(\"Should verify rented status\", () => {",
+							"    pm.expect(respBody.rented).to.eql(true);",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_one_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/books/rent/cl70c6jli01211874jqh6pk6a",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"books",
+						"rent",
+						"cl70c6jli01211874jqh6pk6a"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Move book to avaliable",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let respBody;",
+							"",
+							"pm.test(\"Should verify status code\", () => {",
+							"    pm.response.to.have.status(200);",
+							"    respBody = pm.response.json();",
+							"    console.log(respBody);",
+							"});",
+							"",
+							"pm.test(\"Should verify rented status\", () => {",
+							"    pm.expect(respBody.rented).to.eql(false);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_one_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/books/return/cl70c6jli01211874jqh6pk6a",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"books",
+						"return",
+						"cl70c6jli01211874jqh6pk6a"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete book",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Should verify response status code\", () => {",
+							"    pm.expect(pm.response.code).to.eql(200)",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/books/cl74ge6pi01548t7419jw6ox3",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"books",
+						"cl74ge6pi01548t7419jw6ox3"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwicm9sZSI6IkFETUlOIiwiaWQiOiJjbDZxY2h4aWUwMDAwMGc3NDJxbnQ5c20xIiwiaWF0IjoxNjYxMzI4NDEwLCJleHAiOjE2NjEzMzU2MTB9.fSE4oWsUZWJF_DJ7v33_dmzJC2syryYAZ8UA4YSu88Q",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://0.0.0.0:8080",
+			"type": "string"
+		},
+		{
+			"key": "favBook",
+			"value": "cl6vwkt9g0108h8745j985sll",
+			"type": "string"
+		},
+		{
+			"key": "newName",
+			"value": "Philip K. Dick",
+			"type": "string"
+		},
+		{
+			"key": "adminKEY",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwicm9sZSI6IkFETUlOIiwiaWQiOiJjbDZxY2h4aWUwMDAwMGc3NDJxbnQ5c20xIiwiaWF0IjoxNjYxMzI4MjM4LCJleHAiOjE2NjEzMzU0Mzh9.aXQ3YKRdEjn1T04XJOaBdUp5AAEOkvxenT5eUV1lCc8",
+			"type": "string",
+			"disabled": true
+		},
+		{
+			"key": "user_oneKEY",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXJfb25lIiwicm9sZSI6IlVTRVIiLCJpZCI6ImNsNnFjaHhpcjAwMDcwZzc0ZXpsZGdsbDkiLCJpYXQiOjE2NjEzMjgzNDQsImV4cCI6MTY2MTMzNTU0NH0.eVEjiMnUzJt0rtjKQJHR8zkUVwkCK5v8q0g1dp5Pp_c",
+			"type": "string",
+			"disabled": true
+		}
+	]
+}
