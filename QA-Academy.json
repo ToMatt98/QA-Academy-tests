@@ -565,18 +565,6 @@
 			"key": "newName",
 			"value": "Philip K. Dick",
 			"type": "string"
-		},
-		{
-			"key": "adminKEY",
-			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwicm9sZSI6IkFETUlOIiwiaWQiOiJjbDZxY2h4aWUwMDAwMGc3NDJxbnQ5c20xIiwiaWF0IjoxNjYxMzI4MjM4LCJleHAiOjE2NjEzMzU0Mzh9.aXQ3YKRdEjn1T04XJOaBdUp5AAEOkvxenT5eUV1lCc8",
-			"type": "string",
-			"disabled": true
-		},
-		{
-			"key": "user_oneKEY",
-			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXJfb25lIiwicm9sZSI6IlVTRVIiLCJpZCI6ImNsNnFjaHhpcjAwMDcwZzc0ZXpsZGdsbDkiLCJpYXQiOjE2NjEzMjgzNDQsImV4cCI6MTY2MTMzNTU0NH0.eVEjiMnUzJt0rtjKQJHR8zkUVwkCK5v8q0g1dp5Pp_c",
-			"type": "string",
-			"disabled": true
 		}
 	]
 }
