@@ -16,11 +16,7 @@
 							"if (pm.response.code === 200){",
 							"    const jsonResponse = pm.response.json();",
 							"    pm.globals.set(\"admin_token\", jsonResponse.token);",
-							"}",
-							"",
-							"",
-							"",
-							""
+
 						],
 						"type": "text/javascript"
 					}
@@ -385,15 +381,16 @@
 						"exec": [
 							"let respBody;",
 							"",
-							"pm.test(\"Should verify status code\", () => {",
-							"    pm.response.to.have.status(200);",
+							"if (pm.response.code === 200){",
 							"    respBody = pm.response.json();",
 							"    console.log(respBody);",
-							"});",
 							"",
-							"pm.test(\"Should verify rented status\", () => {",
+							"    pm.test(\"Should verify rented status\", () => {",
 							"    pm.expect(respBody.rented).to.eql(true);",
 							"});",
+							"",
+							"}else (pm.response.code === 403)",
+							"    console.log(\"You are not on user_one account\");",
 							"",
 							""
 						],
@@ -437,15 +434,16 @@
 						"exec": [
 							"let respBody;",
 							"",
-							"pm.test(\"Should verify status code\", () => {",
-							"    pm.response.to.have.status(200);",
+							"if (pm.response.code === 200){",
 							"    respBody = pm.response.json();",
 							"    console.log(respBody);",
+							"",
+							"    pm.test(\"Should verify rented status\", () => {",
+							"    pm.expect(respBody.rented).to.eql(false);",
 							"});",
 							"",
-							"pm.test(\"Should verify rented status\", () => {",
-							"    pm.expect(respBody.rented).to.eql(false);",
-							"});"
+							"}else (pm.response.code === 403)",
+							"    console.log(\"You are not on user_one account\");"
 						],
 						"type": "text/javascript"
 					}
@@ -525,7 +523,7 @@
 		"bearer": [
 			{
 				"key": "token",
-				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwicm9sZSI6IkFETUlOIiwiaWQiOiJjbDZxY2h4aWUwMDAwMGc3NDJxbnQ5c20xIiwiaWF0IjoxNjYxMzI4NDEwLCJleHAiOjE2NjEzMzU2MTB9.fSE4oWsUZWJF_DJ7v33_dmzJC2syryYAZ8UA4YSu88Q",
+				"value": "{{admin_token}}",
 				"type": "string"
 			}
 		]

@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test:newman": "newman run QA-Academy-collection.json"
+    "test:newman": "newman run QA-Academy.json"
   },
   "repository": {
     "type": "git",

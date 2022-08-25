@@ -13,7 +13,5 @@ Make sure that you have installed node.js, yarn
 
 ## Steps to run tests
 
-1. Import file "QA-Academy.json" to Postman as a copy
-2. Change name to: QA-Academy-collection.json
-3. yarn
-4. yarn test:newman
+1. yarn
+2. yarn test:newman
