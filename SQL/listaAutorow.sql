@@ -1,1 +1,1 @@
-Select * FROM 
+Select name FROM authors
